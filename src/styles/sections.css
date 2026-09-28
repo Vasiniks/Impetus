@@ -1,0 +1,197 @@
+/* Chapters are tall scroll tracks; their copy lives in a sticky viewport.
+   Copy opacity/translate is driven from the frame loop via [data-fade], so
+   positioning here never uses transform. */
+.chapter {
+  position: relative;
+}
+
+.chapter--hero { height: 165vh; }
+.chapter--detail { height: 230vh; }
+.chapter--exploded { height: 290vh; }
+.chapter--xray { height: 210vh; }
+.chapter--mechanism { height: 330vh; }
+.chapter--reassembly { height: 200vh; }
+.chapter--philosophy { height: 340vh; }
+
+.sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+}
+
+[data-fade] {
+  will-change: opacity, transform;
+}
+
+/* ---- hero ---- */
+.hero__copy {
+  position: absolute;
+  left: var(--gutter);
+  bottom: 10vh;
+  display: grid;
+  gap: 18px;
+  max-width: 44rem;
+}
+
+.hero__lede {
+  font-size: clamp(1.1rem, 1.4vw, 1.4rem);
+  line-height: 1.35;
+  color: var(--ink-2);
+  max-width: 24ch;
+}
+
+.hero__cue {
+  position: absolute;
+  right: var(--gutter);
+  bottom: 10vh;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font: 400 var(--fs-label) var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.hero__cue-line {
+  width: 1px;
+  height: 44px;
+  background: linear-gradient(var(--ink), transparent);
+  animation: cue 2.4s var(--ease) infinite;
+  transform-origin: top;
+}
+
+@keyframes cue {
+  0% { transform: scaleY(0); }
+  50% { transform: scaleY(1); }
+  100% { transform: scaleY(1); opacity: 0; }
+}
+
+:root[data-reduced-motion] .hero__cue-line {
+  animation: none;
+}
+
+/* ---- generic copy blocks ---- */
+.copy {
+  position: absolute;
+  display: grid;
+  gap: 18px;
+  width: min(30rem, 36vw);
+}
+
+.copy p:not(.label):not(.caption) {
+  color: var(--ink-2);
+  max-width: 38ch;
+}
+
+.copy--right {
+  right: var(--gutter);
+  top: 57vh;
+}
+
+.copy--top {
+  left: var(--gutter);
+  top: calc(var(--nav-h) + 6vh);
+  width: min(34rem, 44vw);
+}
+
+.copy--bottom {
+  left: var(--gutter);
+  bottom: 10vh;
+}
+
+/* ---- exploded legend ---- */
+.legend {
+  position: absolute;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: 6vh;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 32px;
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+}
+
+.legend dt {
+  font: 500 var(--fs-label) var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.legend ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  font-size: 0.86rem;
+  color: var(--ink-2);
+}
+
+/* ---- mechanism steps ---- */
+.steps {
+  position: absolute;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: 6vh;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.steps li {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  opacity: 0.4;
+  transition: opacity 0.35s var(--ease), border-color 0.35s var(--ease);
+}
+
+.steps li[data-active] {
+  opacity: 1;
+  border-top-color: var(--ink);
+}
+
+.steps__n {
+  font: 400 var(--fs-label) var(--mono);
+  color: var(--ink-3);
+}
+
+.steps__k {
+  font-weight: 500;
+  font-size: 1.15rem;
+  letter-spacing: -0.015em;
+}
+
+.steps__t {
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--ink-2);
+}
+
+/* ---- philosophy ---- */
+.statement {
+  position: absolute;
+  left: var(--gutter);
+  top: 30vh;
+  display: grid;
+  gap: 20px;
+  width: min(34rem, 44vw);
+}
+
+.statement h3 {
+  font-size: clamp(2.4rem, 5vw, 4.6rem);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+}
+
+.statement p:not(.label) {
+  color: var(--ink-2);
+  max-width: 34ch;
+  font-size: clamp(1.05rem, 1.2vw, 1.25rem);
+  line-height: 1.45;
+}

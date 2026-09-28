@@ -1,0 +1,169 @@
+/* Laptop: tighten the chapter rail. */
+@media (max-width: 1360px) {
+  .nav__chapters li {
+    min-width: 0;
+    padding: 10px 7px 0;
+  }
+  .nav__num {
+    display: none;
+  }
+}
+
+/* Small laptop / tablet landscape: the rail becomes a single current label. */
+@media (max-width: 1120px) {
+  .nav__chapters {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .nav__current {
+    display: block;
+    justify-self: center;
+  }
+}
+
+/* Tablet portrait */
+@media (max-width: 900px) {
+  .copy,
+  .copy--top,
+  .statement,
+  .lineup__head {
+    width: min(34rem, calc(100vw - 2 * var(--gutter)));
+  }
+  .copy--right {
+    right: auto;
+    left: var(--gutter);
+    top: auto;
+    bottom: 8vh;
+  }
+  .legend {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    bottom: 4vh;
+  }
+  .legend dt {
+    margin-bottom: 4px;
+  }
+  .steps {
+    grid-template-columns: 1fr;
+    gap: 0;
+    bottom: 4vh;
+  }
+  .steps li {
+    grid-template-columns: 1.6em 6.5em 1fr;
+    align-items: baseline;
+    padding: 9px 0;
+    gap: 8px;
+  }
+  .steps li:not([data-active]) .steps__t {
+    visibility: hidden;
+    height: 0;
+  }
+  .statement {
+    top: auto;
+    bottom: 12vh;
+  }
+  /* portrait: the product keeps the frame — legend hides, one movement at a time */
+  .legend {
+    display: none;
+  }
+  .steps li:not([data-active]) {
+    display: none;
+  }
+  .buy {
+    grid-template-columns: 1fr;
+    align-items: end;
+    min-height: 100svh;
+    padding-top: 46vh;
+  }
+  .buy__panel {
+    grid-column: 1;
+  }
+}
+
+/* Phones */
+@media (max-width: 560px) {
+  :root {
+    --nav-h: 56px;
+    --fs-h2: clamp(1.85rem, 8vw, 2.4rem);
+  }
+  .nav {
+    gap: 10px;
+    background: linear-gradient(var(--paper) 55%, rgba(245, 243, 238, 0));
+  }
+  .nav__motion {
+    display: none;
+  }
+  .nav__current {
+    font-size: 0.64rem;
+  }
+  .hero__copy {
+    bottom: 7vh;
+    gap: 12px;
+  }
+  .hero__cue {
+    display: none;
+  }
+  .copy--top,
+  .chapter--xray .copy--bottom {
+    top: calc(var(--nav-h) + 2vh);
+    bottom: auto;
+  }
+  .copy {
+    gap: 12px;
+  }
+  .copy p:not(.label):not(.caption) {
+    font-size: 0.95rem;
+  }
+  .chapter--exploded .copy--top p:not(.label),
+  .chapter--xray .copy--top p:not(.label) {
+    display: none;
+  }
+
+  .steps li {
+    grid-template-columns: 1.4em 6em 1fr;
+    font-size: 0.9rem;
+  }
+
+  .steps__k {
+    font-size: 1rem;
+  }
+  .steps__t {
+    font-size: 0.8rem;
+  }
+  .lineup__head p:not(.label) {
+    display: none;
+  }
+  .variant {
+    width: 78vw;
+  }
+  .finishes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .buy {
+    padding-top: 40vh;
+  }
+  .buy__panel {
+    padding: 22px;
+    gap: 16px;
+  }
+  .footer {
+    flex-direction: column;
+    gap: 6px;
+  }
+}
+
+/* Short landscape viewports (1280x800 and below) */
+@media (max-height: 820px) and (min-width: 901px) {
+  .legend {
+    bottom: 4vh;
+  }
+  .legend ul {
+    font-size: 0.8rem;
+  }
+  .steps__t {
+    font-size: 0.82rem;
+  }
+}

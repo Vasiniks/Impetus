@@ -1,0 +1,23 @@
+:root {
+  --paper: #f5f3ee;
+  --paper-2: #ebe8e1;
+  --ink: #121212;
+  --ink-2: #3a3834;
+  --ink-3: #77736b;
+  --line: rgba(18, 18, 18, 0.14);
+  --line-strong: rgba(18, 18, 18, 0.32);
+  --radius: 2px;
+
+  --sans: 'Inter Tight', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  --fs-display: clamp(3.4rem, 8vw, 8.4rem);
+  --fs-h2: clamp(2rem, 3.9vw, 3.6rem);
+  --fs-h3: clamp(1.6rem, 2.6vw, 2.4rem);
+  --fs-body: clamp(1rem, 0.35vw + 0.9rem, 1.125rem);
+  --fs-label: 0.72rem;
+
+  --gutter: clamp(20px, 3.4vw, 56px);
+  --nav-h: 64px;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}

@@ -1,0 +1,85 @@
+/* The WebGL stage sits behind all copy for the whole page. */
+.stage-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100lvh;
+  display: block;
+  z-index: 0;
+  pointer-events: none;
+  transition: opacity 0.35s linear;
+}
+
+main {
+  position: relative;
+  z-index: 1;
+}
+
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  background: var(--paper);
+  transition: opacity 0.8s var(--ease), visibility 0.8s;
+}
+
+.loader[data-state='ready'] {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.loader[data-state='failed'] {
+  opacity: 0;
+  visibility: hidden;
+  transition-delay: 1.6s;
+}
+
+.loader__inner {
+  display: grid;
+  justify-items: start;
+  gap: 14px;
+  width: min(320px, 70vw);
+}
+
+.loader__name {
+  font: 500 0.95rem var(--sans);
+  letter-spacing: -0.01em;
+}
+
+.loader__count {
+  font: 400 clamp(4.5rem, 12vw, 7.5rem) / 0.9 var(--mono);
+  letter-spacing: -0.06em;
+  font-variant-numeric: tabular-nums;
+}
+
+.loader__of {
+  font-size: 0.3em;
+  letter-spacing: 0;
+  color: var(--ink-3);
+  margin-left: 0.3em;
+}
+
+.loader__bar {
+  width: 100%;
+  height: 1px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.loader__bar span {
+  display: block;
+  height: 100%;
+  background: var(--ink);
+  transform-origin: 0 50%;
+  transition: transform 0.25s linear;
+}
+
+.loader__caption {
+  font: 400 var(--fs-label) / 1.4 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
