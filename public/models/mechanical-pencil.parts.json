@@ -1,0 +1,704 @@
+{
+  "product": "Meridian Hex",
+  "axis": "+Y (tip -> button)",
+  "tiers": {
+    "desktop": {
+      "tris": 21668,
+      "bytes": 2127180
+    },
+    "mobile": {
+      "tris": 13570,
+      "bytes": 1349720
+    }
+  },
+  "parts": [
+    {
+      "name": "lead",
+      "parent": "MeridianHex",
+      "kind": "inner",
+      "mech": "lead",
+      "baseY": -3.4,
+      "explode": 0.155,
+      "label": "0.5 mm lead",
+      "material": "graphite",
+      "extent": [
+        -7.12,
+        0.25
+      ],
+      "tris": 72,
+      "lane": 2
+    },
+    {
+      "name": "leadSleeve",
+      "parent": "MeridianHex",
+      "kind": "inner",
+      "mech": "static",
+      "baseY": -6.6,
+      "explode": -0.8976,
+      "label": "Lead sleeve",
+      "material": "polished_steel",
+      "extent": [
+        -7.0,
+        -6.18
+      ],
+      "tris": 160,
+      "lane": 1
+    },
+    {
+      "name": "noseTip",
+      "parent": "MeridianHex",
+      "kind": "shell",
+      "mech": "static",
+      "baseY": -6.05,
+      "explode": -1.72,
+      "label": "Nose tip",
+      "material": "polished_steel",
+      "extent": [
+        -6.24,
+        -5.86
+      ],
+      "tris": 576
+    },
+    {
+      "name": "noseCone",
+      "parent": "MeridianHex",
+      "kind": "shell",
+      "mech": "static",
+      "baseY": -5.1,
+      "explode": -1.32,
+      "label": "Nose cone",
+      "material": "polished_steel",
+      "extent": [
+        -5.92,
+        -4.3
+      ],
+      "tris": 1536
+    },
+    {
+      "name": "leadGuide",
+      "parent": "MeridianHex",
+      "kind": "inner",
+      "mech": "static",
+      "baseY": -5.3,
+      "explode": -1.0776,
+      "label": "Lead retainer",
+      "material": "polymer",
+      "extent": [
+        -5.84,
+        -4.74
+      ],
+      "tris": 128,
+      "lane": 1
+    },
+    {
+      "name": "springStab",
+      "parent": "MeridianHex",
+      "kind": "inner",
+      "mech": "springStab",
+      "baseY": -5.18,
+      "explode": -0.4782,
+      "label": "Stabiliser spring",
+      "material": "spring_steel",
+      "extent": [
+        -5.1785,
+        -4.76
+      ],
+      "tris": 864,
+      "lane": 1,
+      "length": 0.42
+    },
+    {
+      "name": "brassInsert",
+      "parent": "MeridianHex",
+      "kind": "inner",
+      "mech": "static",
+      "baseY": -4.55,
+      "explode": -0.3383,
+      "label": "Brass bushing",
+      "material": "brass",
+      "extent": [
+        -4.74,
+        -4.36
+      ],
+      "tris": 768,
+      "lane": 1
+    },
+    {
+      "name": "threadRing",
+      "parent": "MeridianHex",
+      "kind": "inner",
+      "mech": "static",
+      "baseY": -4.27,
+      "explode": -0.0783,
+      "label": "Thread ring",
+      "material": "brushed_steel",
+      "extent": [
+        -4.46,
+        -4.09
+      ],
+      "tris": 576,
+      "lane": 1
+    },
+    {
+      "name": "threadRidges",
+      "parent": "threadRing",
+      "kind": "inner",
+      "mech": "static",
+      "baseY": -4.29,
+      "explode": -0.0783,
+      "label": "Thread ring",
+      "material": "brushed_steel",
+      "extent": [
+        -4.44,
+        -4.1402
+      ],
+      "tris": 824,
+      "lane": 1,
+      "follow": "threadRing"
+    },
+    {
+      "name": "gripRingLower",
+      "parent": "MeridianHex",
+      "kind": "shell",
+      "mech": "static",
+      "baseY": -4.21,
+      "explode": -0.98,
+      "label": "Grip ring",
+      "material": "polished_steel",
+      "extent": [
+        -4.3,
+        -4.12
+      ],
+      "tris": 324
+    },
+    {
+      "name": "gripUnderlay",
+      "parent": "MeridianHex",
+      "kind": "shell",
+      "mech": "static",
+      "baseY": -3.03,
+      "explode": -0.64,
+      "label": "Grip core",
+      "material": "recess",
+      "extent": [
+        -4.02,
+        -2.05
+      ],
+      "tris": 300
+    },
+    {
+      "name": "gripSleeve",
+      "parent": "MeridianHex",
+      "kind": "shell",
+      "mech": "static",
+      "baseY": -3.03,
+      "explode": -0.64,
+      "label": "Grip sleeve",
+      "material": "dlc",
+      "extent": [
+        -4.12,
+        -1.95
+      ],
+      "tris": 648,
+      "follow": "gripUnderlay"
+    },
+    {
+      "name": "gripLattice",
+      "parent": "MeridianHex",
+      "kind": "shell",
+      "mech": "static",
+      "baseY": -3.03,
+      "explode": -0.64,
+      "label": "Diamond lattice",
+      "material": "dlc",
+      "extent": [
+        -4.0,
+        -2.07
+      ],
+      "tris": 2112,
+      "follow": "gripUnderlay"
+    },
+    {
+      "name": "gripRingUpper",
+      "parent": "MeridianHex",
+      "kind": "shell",
+      "mech": "static",
+      "baseY": -1.86,
+      "explode": -0.3,
+      "label": "Grip ring",
+      "material": "polished_steel",
+      "extent": [
+        -1.95,
+        -1.78
+      ],
+      "tris": 324
+    },
+    {
+      "name": "clutchJaw0",
+      "parent": "MeridianHex",
+      "kind": "inner",
+      "mech": "jaw",
+      "baseY": -3.74,
+      "explode": 0.3217,
+      "label": "Clutch jaws",
+      "material": "brushed_steel",
+      "extent": [
+        -4.04,
+        -3.44
+      ],
+      "tris": 180,
+      "lane": 1,
+      "jawAngle": 0.0,
+      "radial": 0.16,
+      "radialAngle": 0.0
+    },
+    {
+      "name": "clutchJaw1",
+      "parent": "MeridianHex",
+      "kind": "inner",
+      "mech": "jaw",
+      "baseY": -3.74,
+      "explode": 0.3217,
+      "label": "Clutch jaws",
+      "material": "brushed_steel",
+      "extent": [
+        -4.04,
+        -3.44
+      ],
+      "tris": 180,
+      "lane": 1,
+      "jawAngle": 2.0944,
+      "follow": "clutchJaw0",
+      "radial": 0.16,
+      "radialAngle": 2.0944
+    },
+    {
+      "name": "clutchJaw2",
+      "parent": "MeridianHex",
+      "kind": "inner",
+      "mech": "jaw",
+      "baseY": -3.74,
+      "explode": 0.3217,
+      "label": "Clutch jaws",
+      "material": "brushed_steel",
+      "extent": [
+        -4.04,
+        -3.44
+      ],
+      "tris": 180,
+      "lane": 1,
+      "jawAngle": 4.1888,
+      "follow": "clutchJaw0",
+      "radial": 0.16,
+      "radialAngle": 4.1888
+    },
+    {
+      "name": "clutchRing",
+      "parent": "MeridianHex",
+      "kind": "inner",
+      "mech": "clutch",
+      "baseY": -3.9,
+      "explode": -0.0483,
+      "label": "Clutch ring",
+      "material": "brass",
+      "extent": [
+        -3.96,
+        -3.83
+      ],
+      "tris": 576,
+      "lane": 1
+    },
+    {
+      "name": "clutchBody",
+      "parent": "MeridianHex",
+      "kind": "inner",
+      "mech": "rod",
+      "baseY": -3.61,
+      "explode": 0.7617,
+      "label": "Clutch collar",
+      "material": "brushed_steel",
+      "extent": [
+        -3.72,
+        -3.5
+      ],
+      "tris": 576,
+      "lane": 1
+    },
+    {
+      "name": "actuatorCone",
+      "parent": "MeridianHex",
+      "kind": "inner",
+      "mech": "actuator",
+      "baseY": -3.33,
+      "explode": 0.8817,
+      "label": "Actuator cone",
+      "material": "dark_mech",
+      "extent": [
+        -3.46,
+        -3.2
+      ],
+      "tris": 480,
+      "lane": 1
+    },
+    {
+      "name": "springSeat",
+      "parent": "MeridianHex",
+      "kind": "inner",
+      "mech": "static",
+      "baseY": -3.74,
+      "explode": 1.6017,
+      "label": "Spring seat",
+      "material": "brushed_steel",
+      "extent": [
+        -3.76,
+        -3.72
+      ],
+      "tris": 384,
+      "lane": 1
+    },
+    {
+      "name": "actuatorSleeve",
+      "parent": "MeridianHex",
+      "kind": "inner",
+      "mech": "actuator",
+      "baseY": -2.9,
+      "explode": 1.2417,
+      "label": "Actuator sleeve",
+      "material": "brushed_steel",
+      "extent": [
+        -3.2,
+        -2.6
+      ],
+      "tris": 192,
+      "lane": 1
+    },
+    {
+      "name": "springMain",
+      "parent": "MeridianHex",
+      "kind": "inner",
+      "mech": "springMain",
+      "baseY": -3.72,
+      "explode": 2.5207,
+      "label": "Return spring",
+      "material": "spring_steel",
+      "extent": [
+        -3.7175,
+        -2.0016
+      ],
+      "tris": 1884,
+      "lane": 1,
+      "length": 1.72
+    },
+    {
+      "name": "springStop",
+      "parent": "MeridianHex",
+      "kind": "inner",
+      "mech": "rod",
+      "baseY": -1.975,
+      "explode": 2.6806,
+      "label": "Spring stop",
+      "material": "brushed_steel",
+      "extent": [
+        -2.0,
+        -1.95
+      ],
+      "tris": 576,
+      "lane": 1
+    },
+    {
+      "name": "midShaft",
+      "parent": "MeridianHex",
+      "kind": "inner",
+      "mech": "rod",
+      "baseY": -2.35,
+      "explode": 4.3906,
+      "label": "Mid shaft",
+      "material": "brushed_steel",
+      "extent": [
+        -3.5,
+        -1.2
+      ],
+      "tris": 128,
+      "lane": 1
+    },
+    {
+      "name": "feedRod",
+      "parent": "MeridianHex",
+      "kind": "inner",
+      "mech": "rod",
+      "baseY": -0.82,
+      "explode": 4.6506,
+      "label": "Feed rod",
+      "material": "polymer",
+      "extent": [
+        -1.3,
+        -0.34
+      ],
+      "tris": 224,
+      "lane": 1
+    },
+    {
+      "name": "reservoir",
+      "parent": "MeridianHex",
+      "kind": "inner",
+      "mech": "rod",
+      "baseY": 2.58,
+      "explode": 2.005,
+      "label": "Lead reservoir",
+      "material": "reservoir",
+      "extent": [
+        -0.4,
+        5.55
+      ],
+      "tris": 192,
+      "lane": 2
+    },
+    {
+      "name": "spareLeads",
+      "parent": "MeridianHex",
+      "kind": "inner",
+      "mech": "rod",
+      "baseY": 2.58,
+      "explode": 2.005,
+      "label": "Spare leads",
+      "material": "graphite",
+      "extent": [
+        0.4,
+        5.54
+      ],
+      "tris": 128,
+      "lane": 2,
+      "follow": "reservoir"
+    },
+    {
+      "name": "reservoirPlug",
+      "parent": "MeridianHex",
+      "kind": "inner",
+      "mech": "rod",
+      "baseY": 5.62,
+      "explode": 2.005,
+      "label": "Reservoir plug",
+      "material": "polymer",
+      "extent": [
+        5.48,
+        5.76
+      ],
+      "tris": 160,
+      "lane": 2,
+      "follow": "reservoir"
+    },
+    {
+      "name": "washerTop",
+      "parent": "MeridianHex",
+      "kind": "inner",
+      "mech": "static",
+      "baseY": 5.83,
+      "explode": -1.3294,
+      "label": "Stop washer",
+      "material": "brushed_steel",
+      "extent": [
+        5.8,
+        5.86
+      ],
+      "tris": 384,
+      "lane": 1
+    },
+    {
+      "name": "stem",
+      "parent": "MeridianHex",
+      "kind": "inner",
+      "mech": "stem",
+      "baseY": 6.32,
+      "explode": -0.2724,
+      "label": "Button stem",
+      "material": "brushed_steel",
+      "extent": [
+        5.72,
+        6.92
+      ],
+      "tris": 64,
+      "lane": 1
+    },
+    {
+      "name": "springBtn",
+      "parent": "MeridianHex",
+      "kind": "inner",
+      "mech": "springBtn",
+      "baseY": 5.86,
+      "explode": -1.1701,
+      "label": "Button spring",
+      "material": "spring_steel",
+      "extent": [
+        5.8617,
+        6.4595
+      ],
+      "tris": 948,
+      "lane": 1,
+      "length": 0.6
+    },
+    {
+      "name": "eraserSleeve",
+      "parent": "MeridianHex",
+      "kind": "inner",
+      "mech": "button",
+      "baseY": 6.83,
+      "explode": 0.3476,
+      "label": "Eraser holder",
+      "material": "brushed_steel",
+      "extent": [
+        6.46,
+        7.2
+      ],
+      "tris": 864,
+      "lane": 1
+    },
+    {
+      "name": "eraser",
+      "parent": "MeridianHex",
+      "kind": "inner",
+      "mech": "button",
+      "baseY": 7.05,
+      "explode": 1.1476,
+      "label": "Eraser",
+      "material": "eraser",
+      "extent": [
+        6.56,
+        7.55
+      ],
+      "tris": 144,
+      "lane": 1
+    },
+    {
+      "name": "button",
+      "parent": "MeridianHex",
+      "kind": "shell",
+      "mech": "button",
+      "baseY": 7.22,
+      "explode": 0.84,
+      "label": "Button cap",
+      "material": "brushed_steel",
+      "extent": [
+        6.52,
+        7.92
+      ],
+      "tris": 1248
+    },
+    {
+      "name": "barrel",
+      "parent": "MeridianHex",
+      "kind": "shell",
+      "mech": "static",
+      "baseY": 2.16,
+      "explode": 0.04,
+      "label": "Hex barrel",
+      "material": "anodized",
+      "extent": [
+        -1.78,
+        6.1
+      ],
+      "tris": 420
+    },
+    {
+      "name": "grooveRings",
+      "parent": "MeridianHex",
+      "kind": "shell",
+      "mech": "static",
+      "baseY": 5.0,
+      "explode": 0.04,
+      "label": "Index grooves",
+      "material": "recess",
+      "extent": [
+        4.864,
+        5.126
+      ],
+      "tris": 600,
+      "follow": "barrel"
+    },
+    {
+      "name": "topCollar",
+      "parent": "MeridianHex",
+      "kind": "shell",
+      "mech": "static",
+      "baseY": 6.35,
+      "explode": 0.4,
+      "label": "Top collar",
+      "material": "polished_steel",
+      "extent": [
+        6.08,
+        6.62
+      ],
+      "tris": 768
+    },
+    {
+      "name": "clipRing",
+      "parent": "MeridianHex",
+      "kind": "shell",
+      "mech": "static",
+      "baseY": 6.285,
+      "explode": 0.39,
+      "label": "Clip",
+      "material": "brushed_steel",
+      "extent": [
+        6.2,
+        6.37
+      ],
+      "tris": 576,
+      "radial": 0.55,
+      "radialAngle": 3.141592653589793
+    },
+    {
+      "name": "clipBlade",
+      "parent": "MeridianHex",
+      "kind": "shell",
+      "mech": "static",
+      "baseY": 4.9,
+      "explode": 0.39,
+      "label": "Clip",
+      "material": "brushed_steel",
+      "extent": [
+        3.4166,
+        6.3125
+      ],
+      "tris": 144,
+      "follow": "clipRing",
+      "radial": 0.55,
+      "radialAngle": 3.141592653589793
+    },
+    {
+      "name": "clipFoot",
+      "parent": "MeridianHex",
+      "kind": "shell",
+      "mech": "static",
+      "baseY": 3.4,
+      "explode": 0.39,
+      "label": "Clip",
+      "material": "polished_steel",
+      "extent": [
+        3.342,
+        3.458
+      ],
+      "tris": 96,
+      "follow": "clipRing",
+      "radial": 0.55,
+      "radialAngle": 3.141592653589793
+    },
+    {
+      "name": "clipScrew",
+      "parent": "MeridianHex",
+      "kind": "shell",
+      "mech": "static",
+      "baseY": 6.285,
+      "explode": 0.39,
+      "label": "Clip",
+      "material": "polished_steel",
+      "extent": [
+        6.243,
+        6.327
+      ],
+      "tris": 160,
+      "follow": "clipRing",
+      "radial": 0.55,
+      "radialAngle": 3.141592653589793
+    }
+  ]
+}

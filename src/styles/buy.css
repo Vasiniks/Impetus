@@ -1,0 +1,117 @@
+.chapter--buy {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: 1fr auto;
+}
+
+.buy {
+  display: grid;
+  grid-template-columns: 1fr minmax(320px, 30rem);
+  align-items: center;
+  padding: calc(var(--nav-h) + 4vh) var(--gutter) 6vh;
+}
+
+.buy__panel {
+  grid-column: 2;
+  display: grid;
+  gap: 22px;
+  padding: 32px;
+  background: rgba(245, 243, 238, 0.94);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.buy__title {
+  font-size: clamp(2.4rem, 4.4vw, 4rem);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+}
+
+.buy__price {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  font: 400 1.5rem var(--mono);
+}
+
+.buy__finish {
+  font: 400 var(--fs-label) var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.finishes {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.finishes legend {
+  font: 400 var(--fs-label) var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 12px;
+}
+
+.finish {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 12px 4px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color 0.25s var(--ease);
+}
+
+.finish:hover {
+  border-color: var(--line-strong);
+}
+
+.finish[data-checked] {
+  border-color: var(--ink);
+}
+
+.finish input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  cursor: pointer;
+}
+
+.finish:has(input:focus-visible) {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.finish__chip {
+  width: 22px;
+  height: 26px;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.25), rgba(255, 255, 255, 0.2) 50%, rgba(0, 0, 0, 0.15)), var(--c);
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+}
+
+.finish__name {
+  font-size: 0.8rem;
+}
+
+.buy__panel .button--solid {
+  width: 100%;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px var(--gutter) 28px;
+  border-top: 1px solid var(--line);
+  font: 400 var(--fs-label) var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  background: var(--paper);
+}
