@@ -61,7 +61,7 @@ export function Buy({ variantIdx, onVariant }: Props) {
         </form>
       </div>
       <footer className="footer">
-        <span>Meridian Hex</span>
+        <span>Impetus</span>
         <span>Built from a parametric model of 42 parts</span>
       </footer>
     </section>

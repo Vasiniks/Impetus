@@ -2,7 +2,9 @@
 @media (max-width: 1360px) {
   .nav__chapters li {
     min-width: 0;
-    padding: 10px 7px 0;
+  }
+  .nav__chapters button {
+    padding: 10px 7px 4px;
   }
   .nav__num {
     display: none;
@@ -36,7 +38,7 @@
     right: auto;
     left: var(--gutter);
     top: auto;
-    bottom: 8vh;
+    bottom: calc(5vh + 52px);
   }
   .legend {
     grid-template-columns: 1fr;
@@ -49,7 +51,7 @@
   .steps {
     grid-template-columns: 1fr;
     gap: 0;
-    bottom: 4vh;
+    bottom: calc(4vh + 52px);
   }
   .steps li {
     grid-template-columns: 1.6em 6.5em 1fr;
@@ -63,7 +65,7 @@
   }
   .statement {
     top: auto;
-    bottom: 12vh;
+    bottom: calc(8vh + 52px);
   }
   /* portrait: the product keeps the frame — legend hides, one movement at a time */
   .legend {
@@ -100,7 +102,7 @@
     font-size: 0.64rem;
   }
   .hero__copy {
-    bottom: 7vh;
+    bottom: calc(5vh + 56px);
     gap: 12px;
   }
   .hero__cue {
@@ -118,7 +120,7 @@
     font-size: 0.95rem;
   }
   .chapter--exploded .copy--top p:not(.label),
-  .chapter--xray .copy--top p:not(.label) {
+  .chapter--xray .copy p:not(.label) {
     display: none;
   }
 

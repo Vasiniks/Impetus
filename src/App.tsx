@@ -15,10 +15,12 @@ import {
 } from './components/Chapters';
 import { Lineup } from './components/Lineup';
 import { Buy } from './components/Buy';
+import { Guide } from './components/Guide';
+import { Callouts } from './components/Callouts';
 
 declare global {
   interface Window {
-    __meridian?: Experience;
+    __impetus?: Experience;
   }
 }
 
@@ -32,6 +34,7 @@ export function App() {
   const [lineupIdx, setLineupIdx] = useState(0);
   const [variantIdx, setVariantIdx] = useState(0);
   const [motion, setMotion] = useState(() => !prefersReducedMotion());
+  const [atEnd, setAtEnd] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current!;
@@ -45,6 +48,7 @@ export function App() {
           setFailed(true);
         },
         onChapter: setChapter,
+        onEnd: setAtEnd,
         onLineup: (i) => {
           setLineupIdx(i);
           setVariantIdx(i);
@@ -56,12 +60,12 @@ export function App() {
       return;
     }
     expRef.current = exp;
-    window.__meridian = exp;
+    window.__impetus = exp;
     exp.init(variants[0].color);
     return () => {
       exp.dispose();
       expRef.current = null;
-      delete window.__meridian;
+      delete window.__impetus;
     };
   }, []);
 
@@ -74,21 +78,24 @@ export function App() {
     document.documentElement.toggleAttribute('data-reduced-motion', !motion);
   }, [motion]);
 
+  const go = useCallback((i: number) => expRef.current?.goToChapter(i), []);
   const choose = useCallback((i: number) => {
     setVariantIdx(i);
-    document.getElementById('buy')?.scrollIntoView({ behavior: motion ? 'smooth' : 'auto' });
-  }, [motion]);
+    go(8);
+  }, [go]);
 
   return (
     <>
       <a className="skip-link" href="#buy">Skip to purchase</a>
       <canvas ref={canvasRef} className="stage-canvas" aria-hidden="true" />
       <p className="sr-only">
-        A three-dimensional Meridian Hex pencil follows the page: it is shown whole, taken apart into
+        A three-dimensional Impetus pencil follows the page: it is shown whole, taken apart into
         its 42 parts, seen through its barrel, clicked to advance the lead, and put back together.
       </p>
       <Loader progress={progress} ready={ready} failed={failed} />
-      <Nav chapter={chapter} motion={motion} onToggleMotion={() => setMotion((m) => !m)} />
+      <Callouts />
+      <Nav chapter={chapter} motion={motion} onToggleMotion={() => setMotion((m) => !m)} onGo={go} />
+      <Guide chapter={chapter} atEnd={atEnd} onGo={go} />
       <main>
         <Hero />
         <Detail />

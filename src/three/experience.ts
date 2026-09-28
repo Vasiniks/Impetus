@@ -3,9 +3,16 @@ import { Assembly, type PartRec } from './assembly';
 import { CameraRig, type Key } from './cameraRig';
 import { detectQuality, prefersReducedMotion, type Quality } from './config';
 import { Stage } from './stage';
+import { Scroller } from './scroller';
 import {
   band,
+  calloutInnerF,
+  calloutShellF,
   canvasDimF,
+  HOLD_S,
+  MECH_STOP_M,
+  mechStopS,
+  statementS,
   chapterIndex,
   clamp01,
   heroCopyF,
@@ -26,6 +33,29 @@ export interface ExperienceEvents {
   onChapter?(i: number): void;
   onMechStep?(i: number): void;
   onLineup?(i: number): void;
+  /** Reader has reached the purchase section. */
+  onEnd?(atEnd: boolean): void;
+}
+
+/** Threaded / keyed parts turn as they come off (turns at full explode). */
+const UNSCREW: Record<string, number> = {
+  noseCone: -1,
+  noseTip: -1,
+  threadRing: 1.5,
+  threadRidges: 1.5,
+  gripRingLower: 1,
+  gripRingUpper: -1,
+  gripUnderlay: 0.5,
+  gripSleeve: 0.5,
+  gripLattice: 0.5,
+  button: 1,
+};
+
+interface Callout {
+  el: HTMLElement;
+  part: string;
+  inner: boolean;
+  shown: boolean;
 }
 
 /** Lane offsets (pencil-local X) for the exploded layout. */
@@ -66,6 +96,9 @@ export class Experience {
   private sections: Section[] = [];
   private lineupTrack: HTMLElement | null = null;
   private mechSteps: HTMLElement[] = [];
+  private callouts: Callout[] = [];
+  private chapterBars: HTMLElement[] = [];
+  private scroller: Scroller;
   private vw = 1;
   private vh = 1;
 
@@ -85,6 +118,7 @@ export class Experience {
   private tintLive = false;
 
   private chapter = -1;
+  private atEnd = false;
   private step = -1;
   private lineupIdx = -1;
   private staggers = new Map<string, number>();
@@ -97,6 +131,7 @@ export class Experience {
     this.quality = detectQuality();
     this.stage = new Stage(canvas, this.quality);
     this.motion = !prefersReducedMotion();
+    this.scroller = new Scroller(this.motion);
     this.onResize = this.onResize.bind(this);
     this.onScroll = this.onScroll.bind(this);
     this.frame = this.frame.bind(this);
@@ -147,7 +182,36 @@ export class Experience {
 
   setMotion(on: boolean): void {
     this.motion = on;
+    this.scroller.setEnabled(on);
     this.dirty = true;
+  }
+
+  /** Scroll position (px) at which the timeline reads `s`. */
+  scrollForS(s: number): number {
+    const i = Math.max(0, Math.min(this.sections.length - 1, Math.floor(s)));
+    const sec = this.sections[i];
+    if (!sec) return 0;
+    const y = sec.top + (s - i) * sec.h - this.vh * 0.5;
+    return Math.max(0, Math.min(this.maxScroll(), y));
+  }
+
+  private maxScroll(): number {
+    return document.documentElement.scrollHeight - this.vh;
+  }
+
+  private lineupStop(i: number, n: number): number {
+    const sec = this.sections[SCENES.indexOf('lineup')];
+    return sec.top + (i / (n - 1)) * Math.max(0, sec.h - this.vh);
+  }
+
+  /** Glide to the opening pose of a chapter (0-7), or to purchase (8). */
+  goToChapter(i: number): void {
+    let y: number;
+    if (i <= 5) y = i === 0 ? 0 : this.scrollForS(HOLD_S[i]);
+    else if (i === 6) y = this.scrollForS(statementS(0, 3));
+    else if (i === 7) y = this.lineupStop(0, 4);
+    else y = this.maxScroll();
+    this.scroller.scrollTo(y);
   }
 
   dispose(): void {
@@ -156,6 +220,7 @@ export class Experience {
     window.removeEventListener('resize', this.onResize);
     window.removeEventListener('scroll', this.onScroll);
     this.resizeObs?.disconnect();
+    this.scroller.dispose();
     this.stage.dispose();
   }
 
@@ -173,6 +238,9 @@ export class Experience {
       tip: a ? a.get('lead').node.getWorldPosition(new Vector3()).toArray() : null,
       barrel: a?.barrelMats[0]?.color.getHexString() ?? null,
       ndc: this.debugBounds(),
+      smooth: this.scroller.smooth,
+      stops: this.scroller.stopList,
+      xray: a?.xray ?? 0,
     };
   }
 
@@ -184,7 +252,7 @@ export class Experience {
     const b = new Box3();
     const tmp = new Box3();
     for (const p of this.asm.list) {
-      if (p.kind === 'shell' && p.meshes[0] && (p.meshes[0].material as { opacity: number }).opacity < 0.5) continue;
+      if (p.kind === 'shell' && this.asm.xray > 0.5) continue;
       for (const m of p.meshes) b.union(tmp.setFromObject(m));
     }
     let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
@@ -214,6 +282,21 @@ export class Experience {
     });
     this.lineupTrack = document.querySelector('[data-lineup-track]');
     this.mechSteps = Array.from(document.querySelectorAll<HTMLElement>('[data-mech-step]'));
+    this.callouts = Array.from(document.querySelectorAll<HTMLElement>('[data-callout]')).map((el) => ({
+      el,
+      part: el.dataset.callout!,
+      inner: el.dataset.group === 'inner',
+      shown: false,
+    }));
+    this.chapterBars = Array.from(document.querySelectorAll<HTMLElement>('[data-chapter-bar]'));
+    if (this.sections.length === SCENES.length && this.sections[0].el !== document.body) {
+      const stops = [0, this.maxScroll()];
+      for (const hs of HOLD_S.slice(1)) stops.push(this.scrollForS(hs));
+      for (let k = 1; k < MECH_STOP_M.length; k++) stops.push(this.scrollForS(mechStopS(k)));
+      for (let i = 0; i < 3; i++) stops.push(this.scrollForS(statementS(i, 3)));
+      for (let i = 0; i < 4; i++) stops.push(this.lineupStop(i, 4));
+      this.scroller.setStops(stops);
+    }
   }
 
   private onResize(): void {
@@ -251,6 +334,7 @@ export class Experience {
     this.raf = requestAnimationFrame(this.frame);
     const dt = Math.min(0.05, Math.max(0.001, (now - this.last) / 1000));
     this.last = now;
+    this.scroller.raf(now);
     this.update(dt, false);
   }
 
@@ -261,7 +345,9 @@ export class Experience {
 
     // 1. progress (frame-rate independent damping)
     const ds = this.sTarget - this.s;
-    this.s = motion ? this.s + ds * (1 - Math.exp(-5 * dt)) : this.sTarget;
+    // Lenis already glides the scroll position; this only absorbs frame jitter.
+    const ks = this.scroller.smooth ? 18 : 10;
+    this.s = motion ? this.s + ds * (1 - Math.exp(-ks * dt)) : this.sTarget;
     if (Math.abs(this.sTarget - this.s) < 1e-4) this.s = this.sTarget;
     const s = this.s;
 
@@ -281,7 +367,8 @@ export class Experience {
       asm.setBarrelColor(this.tint);
     }
 
-    const settled = !force && !this.dirty && Math.abs(ds) < 1e-4 && !spinning && !this.tintLive && this.camSettled;
+    const settled =
+      !force && !this.dirty && Math.abs(ds) < 1e-4 && !spinning && !this.tintLive && this.camSettled && !this.scroller.moving;
     this.updateDom(s);
     if (settled) return;
     this.dirty = false;
@@ -303,6 +390,7 @@ export class Experience {
     // 3. parts
     this.updateParts(asm, s);
     pivot.updateMatrixWorld(true);
+    asm.setXray(xrayF(s));
 
     // 4. camera: resolve both keys against live tracked points, then blend
     this.track(a, _v0);
@@ -312,7 +400,7 @@ export class Experience {
     _pos.lerpVectors(_pA, _pB, t);
     _tgt.lerpVectors(_tA, _tB, t);
     const fov = MathUtils.lerp(a.fov, b.fov, t);
-    const kc = motion && this.camInit && !force ? 1 - Math.exp(-8 * dt) : 1;
+    const kc = motion && this.camInit && !force ? 1 - Math.exp(-12 * dt) : 1;
     this.camInit = true;
     this.camPos.lerp(_pos, kc);
     this.camTgt.lerp(_tgt, kc);
@@ -339,10 +427,38 @@ export class Experience {
     const dim = this.rig.portrait ? canvasDimF(s) * 0.72 : 0;
     this.canvas.style.opacity = String(1 - dim);
 
+    this.updateCallouts(asm, s);
     this.stage.render();
   }
 
   private camSettled = false;
+
+  /** Project part centres to screen and pin their labels there. */
+  private updateCallouts(asm: Assembly, s: number): void {
+    if (!this.callouts.length) return;
+    const shellK = this.rig.portrait ? 0 : calloutShellF(s);
+    const innerK = this.rig.portrait ? 0 : calloutInnerF(s);
+    const cam = this.stage.camera;
+    cam.updateMatrixWorld();
+    for (const c of this.callouts) {
+      const k = c.inner ? innerK : shellK;
+      const show = k > 0.01;
+      if (show !== c.shown) {
+        c.shown = show;
+        c.el.style.visibility = show ? 'visible' : 'hidden';
+      }
+      if (!show) continue;
+      const p = asm.parts.get(c.part);
+      const ctr = asm.centers.get(c.part);
+      if (!p || !ctr) continue;
+      _v0.copy(ctr);
+      p.node.localToWorld(_v0).project(cam);
+      const x = (_v0.x * 0.5 + 0.5) * this.vw;
+      const y = (-_v0.y * 0.5 + 0.5) * this.vh;
+      c.el.style.opacity = k.toFixed(3);
+      c.el.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`;
+    }
+  }
 
   private track(key: Key, out: Vector3): void {
     if (!key.track || !this.asm) {
@@ -363,7 +479,6 @@ export class Experience {
     const lf = laneF(s);
     const iex = innerExF(s);
     const lift = band(s, 3.86, 4.2, 5.0, 5.4);
-    asm.setXray(xrayF(s));
 
     // mechanism kinematics
     const m = mechPhase(s);
@@ -378,7 +493,7 @@ export class Experience {
       const stag = this.staggers.get(p.part) ?? 0;
       const raw = p.kind === 'shell' ? shellEx : iex;
       // staggered, eased per-part progress (outermost parts lead)
-      const ax = raw <= 0 ? 0 : raw >= 1 ? 1 : smoothstep(0, 1, clamp01((raw - stag * 0.28) / 0.72));
+      const ax = raw <= 0 ? 0 : raw >= 1 ? 1 : smoothstep(0, 1, clamp01((raw - stag * 0.34) / 0.66));
       let x = 0;
       let z = 0;
       if (p.lane > 0 || p.kind === 'shell') {
@@ -420,14 +535,16 @@ export class Experience {
           sy = 1 - (d * STROKE * 0.3) / (p.length ?? 1);
           break;
       }
-      this.place(p, x, y, z, sy);
+      const turns = UNSCREW[p.part];
+      this.place(p, x, y, z, sy, turns ? turns * Math.PI * 2 * ax : 0);
     }
   }
 
-  private place(p: PartRec, x: number, y: number, z: number, sy: number): void {
+  private place(p: PartRec, x: number, y: number, z: number, sy: number, spin: number): void {
     const n = p.node;
     n.position.set(x, y, z);
     n.scale.set(1, sy, 1);
+    n.rotation.y = spin;
   }
 
   private updateDom(s: number): void {
@@ -439,7 +556,7 @@ export class Experience {
       const f = (anchor - sec.top) / sec.h;
       const inView = f > -0.3 && f < 1.3;
       if (!inView) continue;
-      const span = Math.min(0.18, (vh * 0.35) / sec.h);
+      const span = Math.min(0.12, (vh * 0.24) / sec.h);
       const o = i === 0 ? heroCopyF(s) : band(f, 0.02, 0.02 + span, 0.98 - span, 0.995);
       for (const el of sec.fades) {
         let oo = o;
@@ -460,6 +577,18 @@ export class Experience {
           el.style.visibility = oo < 0.01 ? 'hidden' : 'visible';
         }
       }
+    }
+
+    for (let i = 0; i < this.chapterBars.length; i++) {
+      const v = clamp01(s - i).toFixed(3);
+      const el = this.chapterBars[i];
+      if (el.style.getPropertyValue('--p') !== v) el.style.setProperty('--p', v);
+    }
+
+    const end = s > 7.93;
+    if (end !== this.atEnd) {
+      this.atEnd = end;
+      this.events.onEnd?.(end);
     }
 
     const ch = chapterIndex(s);

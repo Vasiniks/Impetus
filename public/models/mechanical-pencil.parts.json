@@ -1,20 +1,20 @@
 {
-  "product": "Meridian Hex",
+  "product": "Impetus",
   "axis": "+Y (tip -> button)",
   "tiers": {
     "desktop": {
       "tris": 21668,
-      "bytes": 2127180
+      "bytes": 2127008
     },
     "mobile": {
       "tris": 13570,
-      "bytes": 1349720
+      "bytes": 1349552
     }
   },
   "parts": [
     {
       "name": "lead",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "inner",
       "mech": "lead",
       "baseY": -3.4,
@@ -30,7 +30,7 @@
     },
     {
       "name": "leadSleeve",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "inner",
       "mech": "static",
       "baseY": -6.6,
@@ -46,7 +46,7 @@
     },
     {
       "name": "noseTip",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "shell",
       "mech": "static",
       "baseY": -6.05,
@@ -61,7 +61,7 @@
     },
     {
       "name": "noseCone",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "shell",
       "mech": "static",
       "baseY": -5.1,
@@ -76,7 +76,7 @@
     },
     {
       "name": "leadGuide",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "inner",
       "mech": "static",
       "baseY": -5.3,
@@ -92,7 +92,7 @@
     },
     {
       "name": "springStab",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "inner",
       "mech": "springStab",
       "baseY": -5.18,
@@ -109,7 +109,7 @@
     },
     {
       "name": "brassInsert",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "inner",
       "mech": "static",
       "baseY": -4.55,
@@ -125,7 +125,7 @@
     },
     {
       "name": "threadRing",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "inner",
       "mech": "static",
       "baseY": -4.27,
@@ -158,7 +158,7 @@
     },
     {
       "name": "gripRingLower",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "shell",
       "mech": "static",
       "baseY": -4.21,
@@ -173,7 +173,7 @@
     },
     {
       "name": "gripUnderlay",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "shell",
       "mech": "static",
       "baseY": -3.03,
@@ -188,7 +188,7 @@
     },
     {
       "name": "gripSleeve",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "shell",
       "mech": "static",
       "baseY": -3.03,
@@ -204,7 +204,7 @@
     },
     {
       "name": "gripLattice",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "shell",
       "mech": "static",
       "baseY": -3.03,
@@ -220,7 +220,7 @@
     },
     {
       "name": "gripRingUpper",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "shell",
       "mech": "static",
       "baseY": -1.86,
@@ -235,7 +235,7 @@
     },
     {
       "name": "clutchJaw0",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "inner",
       "mech": "jaw",
       "baseY": -3.74,
@@ -254,7 +254,7 @@
     },
     {
       "name": "clutchJaw1",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "inner",
       "mech": "jaw",
       "baseY": -3.74,
@@ -274,7 +274,7 @@
     },
     {
       "name": "clutchJaw2",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "inner",
       "mech": "jaw",
       "baseY": -3.74,
@@ -294,7 +294,7 @@
     },
     {
       "name": "clutchRing",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "inner",
       "mech": "clutch",
       "baseY": -3.9,
@@ -310,7 +310,7 @@
     },
     {
       "name": "clutchBody",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "inner",
       "mech": "rod",
       "baseY": -3.61,
@@ -326,7 +326,7 @@
     },
     {
       "name": "actuatorCone",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "inner",
       "mech": "actuator",
       "baseY": -3.33,
@@ -342,7 +342,7 @@
     },
     {
       "name": "springSeat",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "inner",
       "mech": "static",
       "baseY": -3.74,
@@ -358,7 +358,7 @@
     },
     {
       "name": "actuatorSleeve",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "inner",
       "mech": "actuator",
       "baseY": -2.9,
@@ -374,7 +374,7 @@
     },
     {
       "name": "springMain",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "inner",
       "mech": "springMain",
       "baseY": -3.72,
@@ -391,7 +391,7 @@
     },
     {
       "name": "springStop",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "inner",
       "mech": "rod",
       "baseY": -1.975,
@@ -407,7 +407,7 @@
     },
     {
       "name": "midShaft",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "inner",
       "mech": "rod",
       "baseY": -2.35,
@@ -423,7 +423,7 @@
     },
     {
       "name": "feedRod",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "inner",
       "mech": "rod",
       "baseY": -0.82,
@@ -439,7 +439,7 @@
     },
     {
       "name": "reservoir",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "inner",
       "mech": "rod",
       "baseY": 2.58,
@@ -455,7 +455,7 @@
     },
     {
       "name": "spareLeads",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "inner",
       "mech": "rod",
       "baseY": 2.58,
@@ -472,7 +472,7 @@
     },
     {
       "name": "reservoirPlug",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "inner",
       "mech": "rod",
       "baseY": 5.62,
@@ -489,7 +489,7 @@
     },
     {
       "name": "washerTop",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "inner",
       "mech": "static",
       "baseY": 5.83,
@@ -505,7 +505,7 @@
     },
     {
       "name": "stem",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "inner",
       "mech": "stem",
       "baseY": 6.32,
@@ -521,7 +521,7 @@
     },
     {
       "name": "springBtn",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "inner",
       "mech": "springBtn",
       "baseY": 5.86,
@@ -538,7 +538,7 @@
     },
     {
       "name": "eraserSleeve",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "inner",
       "mech": "button",
       "baseY": 6.83,
@@ -554,7 +554,7 @@
     },
     {
       "name": "eraser",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "inner",
       "mech": "button",
       "baseY": 7.05,
@@ -570,7 +570,7 @@
     },
     {
       "name": "button",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "shell",
       "mech": "button",
       "baseY": 7.22,
@@ -585,7 +585,7 @@
     },
     {
       "name": "barrel",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "shell",
       "mech": "static",
       "baseY": 2.16,
@@ -600,7 +600,7 @@
     },
     {
       "name": "grooveRings",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "shell",
       "mech": "static",
       "baseY": 5.0,
@@ -616,7 +616,7 @@
     },
     {
       "name": "topCollar",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "shell",
       "mech": "static",
       "baseY": 6.35,
@@ -631,7 +631,7 @@
     },
     {
       "name": "clipRing",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "shell",
       "mech": "static",
       "baseY": 6.285,
@@ -648,7 +648,7 @@
     },
     {
       "name": "clipBlade",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "shell",
       "mech": "static",
       "baseY": 4.9,
@@ -666,7 +666,7 @@
     },
     {
       "name": "clipFoot",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "shell",
       "mech": "static",
       "baseY": 3.4,
@@ -684,7 +684,7 @@
     },
     {
       "name": "clipScrew",
-      "parent": "MeridianHex",
+      "parent": "Impetus",
       "kind": "shell",
       "mech": "static",
       "baseY": 6.285,

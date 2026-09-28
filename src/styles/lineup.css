@@ -23,7 +23,7 @@
 .lineup__viewport {
   grid-row: 2;
   overflow: hidden;
-  padding: 0 var(--gutter) 5vh;
+  padding: 0 var(--gutter) calc(5vh + 52px);
 }
 
 .lineup__track {

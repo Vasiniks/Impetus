@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Parametric builder for the Meridian Hex mechanical pencil.
+Parametric builder for the Impetus mechanical pencil.
 
 This file is the single source of truth for the product geometry. Every part is
 built from math primitives (hex lathes, round lathes, helices, swept strips,
@@ -736,7 +736,7 @@ def define_assembly() -> list[Part]:
     def part(name, parent, baseY, explode, kind, mech, build, material, label, **extra):
         P.append(Part(name, parent, baseY, explode, kind, mech, build, material, label, dict(extra)))
 
-    R = "MeridianHex"
+    R = "Impetus"
     # ---- tip ----
     part("lead", R, -3.4, 0, "inner", "lead", g_lead, "graphite", "0.5 mm lead", lane=2)
     part("leadSleeve", R, -6.6, 0, "inner", "static", g_lead_sleeve, "polished_steel",
@@ -911,7 +911,7 @@ MATERIALS = {
 
 def write_glb(parts: list[Part], meshes: dict, path: Path) -> None:
     gltf = g.GLTF2()
-    gltf.asset = g.Asset(generator="Meridian build_pencil_glb.py", version="2.0")
+    gltf.asset = g.Asset(generator="Impetus build_pencil_glb.py", version="2.0")
     gltf.scene = 0
     blob = bytearray()
 
@@ -943,7 +943,7 @@ def write_glb(parts: list[Part], meshes: dict, path: Path) -> None:
         gltf.accessors.append(acc)
         return len(gltf.accessors) - 1
 
-    root = g.Node(name="MeridianHex", children=[])
+    root = g.Node(name="Impetus", children=[])
     gltf.nodes.append(root)
     for p in parts:
         P, N, UV = meshes[p.name]
@@ -1023,7 +1023,7 @@ def main() -> int:
     for name in sorted(report["desktop"]["perPart"], key=lambda n: -report["desktop"]["perPart"][n])[:8]:
         print(f"    {name:16s} {report['desktop']['perPart'][name]:6d} tris")
     manifest = {
-        "product": "Meridian Hex",
+        "product": "Impetus",
         "axis": "+Y (tip -> button)",
         "tiers": {k: {"tris": v["tris"], "bytes": v["bytes"]} for k, v in report.items()},
         "parts": [

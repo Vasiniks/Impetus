@@ -18,6 +18,7 @@ const SHOTS = [
   ['detail', 1.4],
   ['exploded-start', 2.12],
   ['exploded', 2.6],
+  ['xray-sweep', 3.1],
   ['xray', 3.6],
   ['mechanism-press', 4.42],
   ['mechanism-open', 4.58],
@@ -68,7 +69,7 @@ for (const [w, h] of VIEWPORTS) {
   page.on('requestfailed', (r) => failed.push(r.url()));
 
   await page.goto(`${base}/?quality=${process.env.QA_QUALITY || (w < 800 ? 'low' : 'high')}`);
-  await page.waitForFunction(() => window.__meridian?.debugState().parts === 42, null, { timeout: 60000 });
+  await page.waitForFunction(() => window.__impetus?.debugState().parts === 42, null, { timeout: 60000 });
   await page.waitForTimeout(1200);
 
   const labels = await page.$$eval('.nav__chapters li .nav__label', (els) => els.map((e) => e.textContent));
@@ -84,9 +85,9 @@ for (const [w, h] of VIEWPORTS) {
       const top = r.top + scrollY;
       scrollTo(0, top + (s - i) * r.height - innerHeight / 2);
     }, s);
-    await page.waitForFunction((s) => Math.abs(window.__meridian.debugState().s - s) < 0.02 || s > 8.3, s, { timeout: 15000 }).catch(() => {});
+    await page.waitForFunction((s) => Math.abs(window.__impetus.debugState().s - s) < 0.02 || s > 8.3, s, { timeout: 15000 }).catch(() => {});
     await page.waitForTimeout(900);
-    const st = await page.evaluate(() => window.__meridian.debugState());
+    const st = await page.evaluate(() => window.__impetus.debugState());
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1);
     if (overflow) fail(`${tag} ${name}: horizontal overflow`);
     const file = `${OUT}/${tag}-${name}.png`;
@@ -98,11 +99,11 @@ for (const [w, h] of VIEWPORTS) {
   }
 
   // variant switching recolors the live barrel and the price follows
-  const before = await page.evaluate(() => window.__meridian.debugState().barrel);
+  const before = await page.evaluate(() => window.__impetus.debugState().barrel);
   const label = page.locator('.finish').nth(1);
   await label.click();
   await page.waitForTimeout(1200);
-  const after = await page.evaluate(() => window.__meridian.debugState().barrel);
+  const after = await page.evaluate(() => window.__impetus.debugState().barrel);
   const price1 = await page.textContent('[data-testid=price]');
   await page.locator('.finish').nth(3).click();
   await page.waitForTimeout(300);
@@ -119,6 +120,52 @@ for (const [w, h] of VIEWPORTS) {
   if (real.length) fail(`${tag}: console errors ${JSON.stringify(real.slice(0, 5))}`);
   if (failed.length) fail(`${tag}: failed requests ${failed.join(', ')}`);
   report.viewports.push(vp);
+  await ctx.close();
+}
+
+// ---- motion on: smooth scroll, chapter navigation and snap guiding ----
+{
+  console.log('\n== motion (1440x900)');
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'no-preference' });
+  const page = await ctx.newPage();
+  const errors = [];
+  page.on('pageerror', (e) => errors.push(String(e)));
+  await page.goto(`${base}/?quality=low`);
+  await page.waitForFunction(() => window.__impetus?.debugState().parts === 42, null, { timeout: 60000 });
+  await page.waitForTimeout(1500);
+  const st0 = await page.evaluate(() => window.__impetus.debugState());
+  if (!st0.smooth) fail('motion: smooth scrolling is not active');
+
+  // nav click glides to the exploded hold pose
+  await page.click('.nav__chapters li:nth-child(3) button');
+  await page.waitForFunction(() => Math.abs(window.__impetus.debugState().s - 2.6) < 0.04, null, { timeout: 20000 }).catch(() => {});
+  const s1 = await page.evaluate(() => window.__impetus.debugState().s);
+  console.log(`  nav -> exploded    s=${s1.toFixed(3)}`);
+  if (Math.abs(s1 - 2.6) > 0.04) fail(`motion: nav click landed at s=${s1}`);
+  await page.screenshot({ path: `${OUT}/motion-exploded-callouts.png` });
+
+  // wheel forward, then go idle: the page settles on a stop ahead
+  await page.mouse.move(700, 450);
+  for (let i = 0; i < 6; i++) {
+    await page.mouse.wheel(0, 180);
+    await page.waitForTimeout(60);
+  }
+  await page.waitForTimeout(4000);
+  const st2 = await page.evaluate(() => ({ y: scrollY, stops: window.__impetus.debugState().stops, s: window.__impetus.debugState().s }));
+  const nearest = Math.min(...st2.stops.map((v) => Math.abs(v - st2.y)));
+  console.log(`  wheel + idle       s=${st2.s.toFixed(3)} offStop=${nearest.toFixed(1)}px`);
+  if (nearest > 4) fail(`motion: did not settle on a stop (${nearest}px away)`);
+  if (st2.s < s1 + 0.1) fail(`motion: snap pulled backwards (s=${st2.s})`);
+  await page.screenshot({ path: `${OUT}/motion-after-snap.png` });
+
+  // guide button advances one chapter
+  const chBefore = await page.evaluate(() => window.__impetus.debugState().chapter);
+  await page.click('.guide');
+  await page.waitForTimeout(4000);
+  const chAfter = await page.evaluate(() => window.__impetus.debugState().chapter);
+  console.log(`  guide              chapter ${chBefore} -> ${chAfter}`);
+  if (chAfter !== chBefore + 1) fail(`motion: guide went ${chBefore} -> ${chAfter}`);
+  if (errors.length) fail(`motion: page errors ${errors}`);
   await ctx.close();
 }
 

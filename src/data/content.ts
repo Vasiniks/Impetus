@@ -8,7 +8,7 @@
 
 export const hero = {
   eyebrow: 'Mechanical pencil · 0.5 mm',
-  title: 'Meridian Hex',
+  title: 'Impetus',
   lede: 'Six flat faces, forty-two parts, one click.',
   cue: 'Scroll to take it apart',
 };
@@ -84,12 +84,12 @@ export const variants: Variant[] = [
 export const lineup = {
   index: '08',
   title: 'Four finishes. One mechanism.',
-  body: 'Every Meridian Hex shares the same 42 parts. Only the barrel anodizing changes.',
+  body: 'Every Impetus shares the same 42 parts. Only the barrel anodizing changes.',
   shared: 'Steel nose · DLC grip · 0.5 mm clutch',
 };
 
 export const buy = {
-  title: 'Meridian Hex',
+  title: 'Impetus',
   note: 'Demonstration storefront — no order is placed.',
   cta: 'Add to bag',
 };
