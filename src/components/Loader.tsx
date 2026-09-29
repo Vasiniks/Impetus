@@ -25,7 +25,7 @@ export function Loader({ progress, ready, failed }: Props) {
       aria-live="polite"
     >
       <div className="loader__inner">
-        <span className="loader__name">Meridian Hex</span>
+        <span className="loader__name">Impetus</span>
         <span className="loader__count" aria-hidden="true">
           {String(parts).padStart(2, '0')}
           <span className="loader__of">/42</span>

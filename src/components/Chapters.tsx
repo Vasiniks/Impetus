@@ -19,10 +19,6 @@ export function Hero() {
           <h1 id="hero-title" className="display">{hero.title}</h1>
           <p className="hero__lede">{hero.lede}</p>
         </div>
-        <p className="hero__cue" data-fade aria-hidden="true">
-          <span className="hero__cue-line" />
-          {hero.cue}
-        </p>
       </div>
     </section>
   );

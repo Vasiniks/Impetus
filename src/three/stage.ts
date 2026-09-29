@@ -122,6 +122,7 @@ export class Stage {
     r.toneMappingExposure = 1.06;
     r.setClearColor(0x000000, 0);
     r.shadowMap.enabled = quality.shadows;
+    r.localClippingEnabled = true;
     r.shadowMap.type = VSMShadowMap;
 
     this.scene.environment = buildStudioEnv(r, quality.envResolution);

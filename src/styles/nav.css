@@ -42,19 +42,49 @@
 }
 
 .nav__chapters li {
+  min-width: 72px;
+}
+
+.nav__chapters button {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding: 10px 10px 0;
-  min-width: 72px;
-  border-top: 1px solid var(--line);
+  width: 100%;
+  padding: 10px 10px 4px;
+  border: 0;
+  background: none;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  text-align: left;
   color: var(--ink-3);
-  transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
+  cursor: pointer;
+  transition: color 0.2s var(--ease);
 }
 
-.nav__chapters li[data-active] {
+.nav__chapters button:hover,
+.nav__chapters li[data-active] button {
   color: var(--ink);
-  border-top-color: var(--ink);
+}
+
+/* hairline track + progress fill driven by the frame loop (--p) */
+.nav__bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--line);
+}
+
+.nav__bar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  transform-origin: 0 50%;
+  transform: scaleX(var(--p, 0));
 }
 
 .nav__num {

@@ -99,7 +99,7 @@
 
 .copy--bottom {
   left: var(--gutter);
-  bottom: 10vh;
+  bottom: calc(6vh + 52px);
 }
 
 /* ---- exploded legend ---- */
@@ -107,7 +107,7 @@
   position: absolute;
   left: var(--gutter);
   right: var(--gutter);
-  bottom: 6vh;
+  bottom: calc(5vh + 44px);
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 32px;
@@ -135,7 +135,7 @@
   position: absolute;
   left: var(--gutter);
   right: var(--gutter);
-  bottom: 6vh;
+  bottom: calc(6vh + 44px);
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 20px;

@@ -1,4 +1,18 @@
-import { Color, Group, Mesh, MeshStandardMaterial, Object3D } from 'three';
+import {
+  Color,
+  EdgesGeometry,
+  Group,
+  LineBasicMaterial,
+  LineSegments,
+  Mesh,
+  MeshBasicMaterial,
+  MeshStandardMaterial,
+  Object3D,
+  PlaneGeometry,
+  Plane,
+  ShaderMaterial,
+  Vector3,
+} from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 export type PartKind = 'shell' | 'inner';
@@ -67,7 +81,40 @@ export class Assembly {
   readonly shellMats: MeshStandardMaterial[] = [];
   readonly glowMats: { mat: MeshStandardMaterial; base: Color }[] = [];
   readonly barrelMats: MeshStandardMaterial[] = [];
-  private xrayTransparent = false;
+  /** Local-space bounding centre of every part (callout anchors). */
+  readonly centers = new Map<string, Vector3>();
+  /** Keeps shell fragments behind the scan front; the ghost keeps the rest. */
+  readonly solidClip = new Plane();
+  readonly ghostClip = new Plane();
+  xray = 0;
+  private ghosts: Object3D[] = [];
+  private ghostMat = makeGhostMaterial(this.ghostClip);
+  private edgeMat = new LineBasicMaterial({
+    color: INK,
+    transparent: true,
+    opacity: 0.62,
+    depthWrite: false,
+    clippingPlanes: [this.ghostClip],
+  });
+  private scan = new Group();
+  private scanLine: MeshBasicMaterial;
+  private scanHalo: MeshBasicMaterial;
+  private ghostsOn = false;
+
+  constructor() {
+    // The scan front: a hairline with a soft halo, perpendicular to the axis.
+    this.scanLine = new MeshBasicMaterial({ color: INK, transparent: true, depthWrite: false, toneMapped: false });
+    this.scanHalo = new MeshBasicMaterial({ color: INK, transparent: true, depthWrite: false, toneMapped: false });
+    const line = new Mesh(new PlaneGeometry(1, 1), this.scanLine);
+    line.scale.set(6.2, 0.014, 1);
+    const halo = new Mesh(new PlaneGeometry(1, 1), this.scanHalo);
+    halo.scale.set(6.2, 0.22, 1);
+    line.position.x = halo.position.x = -0.55;
+    line.renderOrder = halo.renderOrder = 3;
+    this.scan.add(halo, line);
+    this.scan.visible = false;
+    this.root.add(this.scan);
+  }
 
   static async load(url: string, onProgress?: (f: number) => void): Promise<Assembly> {
     const loader = new GLTFLoader();
@@ -105,11 +152,23 @@ export class Assembly {
           let c = shellClones.get(mat);
           if (!c) {
             c = mat.clone();
+            c.clippingPlanes = [this.solidClip];
+            c.clipShadows = true;
             shellClones.set(mat, c);
             this.shellMats.push(c);
           }
           mat = c;
           m.material = c;
+          // x-ray twins: a fresnel ghost and crisp machined edges
+          const ghost = new Mesh(m.geometry, this.ghostMat);
+          ghost.renderOrder = 2;
+          ghost.frustumCulled = false;
+          const edges = new LineSegments(new EdgesGeometry(m.geometry, 28), this.edgeMat);
+          edges.renderOrder = 2;
+          edges.frustumCulled = false;
+          ghost.visible = edges.visible = false;
+          m.add(ghost, edges);
+          this.ghosts.push(ghost, edges);
         }
         if (mat.name === 'anodized' && !this.barrelMats.includes(mat)) this.barrelMats.push(mat);
         const thin = ex.mech.startsWith('spring') || ex.part === 'lead' || ex.part === 'threadRidges';
@@ -117,6 +176,8 @@ export class Assembly {
         m.receiveShadow = true;
         m.frustumCulled = false;
       }
+      meshes[0].geometry.computeBoundingBox();
+      this.centers.set(ex.part, meshes[0].geometry.boundingBox!.getCenter(new Vector3()));
       const rec: PartRec = { ...ex, node, meshes, lane: ex.lane ?? 0 };
       this.parts.set(ex.part, rec);
       this.list.push(rec);
@@ -145,19 +206,40 @@ export class Assembly {
     return p;
   }
 
-  /** Fade only the shell; floor at 0.15 so the silhouette survives. */
+  /**
+   * X-ray as a scan: a front sweeps from the button to the tip. Behind it the
+   * shell is solid metal; past it the shell becomes a blueprint — fresnel
+   * ghost plus machined edges — and the mechanism lifts in brightness.
+   * Call after the scene graph's world matrices are current.
+   */
   setXray(xr: number): void {
-    const transparent = xr > 0.002;
-    const changed = transparent !== this.xrayTransparent;
-    this.xrayTransparent = transparent;
-    for (const m of this.shellMats) {
-      m.opacity = 1 - xr * 0.85;
-      m.depthWrite = xr < 0.4;
-      if (changed) {
-        m.transparent = transparent;
-        m.needsUpdate = true;
-      }
+    this.xray = xr;
+    const on = xr > 0.001;
+    if (on !== this.ghostsOn) {
+      this.ghostsOn = on;
+      for (const g of this.ghosts) g.visible = on;
     }
+    // front position along the pencil axis, in root-local units
+    const front = 11.5 - 23 * xr;
+    const e = this.root.matrixWorld.elements;
+    _axis.set(e[4], e[5], e[6]).normalize();
+    _origin.set(e[12], e[13], e[14]);
+    const c = _axis.dot(_origin) + front;
+    this.solidClip.normal.copy(_axis).negate();
+    this.solidClip.constant = c;
+    this.ghostClip.normal.copy(_axis);
+    this.ghostClip.constant = -c;
+
+    const sweeping = xr > 0.004 && xr < 0.996;
+    this.scan.visible = sweeping;
+    if (sweeping) {
+      this.scan.position.y = front;
+      const k = Math.sin(Math.PI * xr);
+      this.scanLine.opacity = 0.9 * Math.min(1, k * 3);
+      this.scanHalo.opacity = 0.05 * k;
+    }
+    this.ghostMat.uniforms.uOpacity.value = Math.min(1, xr * 4);
+
     for (const { mat, base } of this.glowMats) {
       mat.emissive.copy(base).multiplyScalar(xr * (mat.name === 'reservoir' ? 0.35 : 0.22));
     }
@@ -166,6 +248,46 @@ export class Assembly {
   setBarrelColor(c: Color): void {
     for (const m of this.barrelMats) m.color.copy(c).multiplyScalar(LOOKDEV.anodized.lift!);
   }
+}
+
+const INK = new Color('#20405f');
+const _axis = new Vector3();
+const _origin = new Vector3();
+
+function makeGhostMaterial(clip: Plane): ShaderMaterial {
+  const m = new ShaderMaterial({
+    uniforms: { uColor: { value: INK.clone() }, uOpacity: { value: 0 } },
+    vertexShader: /* glsl */ `
+      #include <clipping_planes_pars_vertex>
+      varying vec3 vN;
+      varying vec3 vV;
+      void main() {
+        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+        vN = normalize(normalMatrix * normal);
+        vV = -mvPosition.xyz;
+        gl_Position = projectionMatrix * mvPosition;
+        #include <clipping_planes_vertex>
+      }`,
+    fragmentShader: /* glsl */ `
+      #include <clipping_planes_pars_fragment>
+      uniform vec3 uColor;
+      uniform float uOpacity;
+      varying vec3 vN;
+      varying vec3 vV;
+      void main() {
+        #include <clipping_planes_fragment>
+        float f = 1.0 - abs(dot(normalize(vN), normalize(vV)));
+        float a = uOpacity * (0.045 + 0.5 * pow(f, 2.6));
+        gl_FragColor = vec4(uColor, a);
+        #include <tonemapping_fragment>
+        #include <colorspace_fragment>
+      }`,
+    transparent: true,
+    depthWrite: false,
+  });
+  m.clipping = true;
+  m.clippingPlanes = [clip];
+  return m;
 }
 
 function tuneLookdev(mat: MeshStandardMaterial): void {

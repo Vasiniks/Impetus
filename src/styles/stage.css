@@ -83,3 +83,129 @@ main {
   text-transform: uppercase;
   color: var(--ink-3);
 }
+
+/* ---- scroll guide ---- */
+.guide {
+  position: fixed;
+  z-index: 20;
+  left: 50%;
+  bottom: 22px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 38px;
+  padding: 0 14px 0 16px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: rgba(245, 243, 238, 0.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font: 400 0.68rem var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+  cursor: pointer;
+  transform: translate(-50%, 0);
+  transition: opacity 0.25s var(--ease), transform 0.25s var(--ease), border-color 0.2s var(--ease);
+}
+
+.guide:hover {
+  border-color: var(--ink);
+}
+
+.guide[data-hidden] {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 12px);
+}
+
+.guide__k {
+  color: var(--ink-3);
+}
+
+.guide svg {
+  width: 12px;
+  height: 12px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  animation: nudge 1.8s var(--ease) infinite;
+}
+
+@keyframes nudge {
+  0%, 60%, 100% { transform: translateY(0); }
+  30% { transform: translateY(3px); }
+}
+
+:root[data-reduced-motion] .guide svg {
+  animation: none;
+}
+
+/* ---- callouts pinned to live parts ---- */
+.callouts {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.callout {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  visibility: hidden;
+  will-change: transform, opacity;
+}
+
+.callout__tag {
+  position: absolute;
+  left: 0;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font: 400 0.64rem var(--mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink);
+  padding: 2px 5px;
+  background: rgba(245, 243, 238, 0.86);
+  border-radius: var(--radius);
+}
+
+/* leader: a hairline from the part centre to the tag, plus a dot */
+.callout::before,
+.callout::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  background: var(--ink);
+}
+
+.callout::after {
+  width: 5px;
+  height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  border-radius: 50%;
+}
+
+.callout[data-group='shell']::before {
+  bottom: 0;
+  width: 1px;
+  height: 44px;
+}
+
+.callout[data-group='shell'] .callout__tag {
+  bottom: 44px;
+}
+
+.callout[data-group='inner']::before {
+  top: 0;
+  width: 1px;
+  height: 22px;
+}
+
+.callout[data-group='inner'] .callout__tag {
+  top: 22px;
+}
